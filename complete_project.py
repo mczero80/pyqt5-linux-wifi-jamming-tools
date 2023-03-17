@@ -9,6 +9,8 @@ import socket
 import json
 import argparse
 
+from dialog import Dialog
+
 from pull import PULL
 
 import pywifi
@@ -17,11 +19,41 @@ from scapy.all import *
 from scapy.layers.dot11 import Dot11Elt, Dot11, Dot11Beacon
 
 if os.geteuid()==0:
-    wifi = pywifi.PyWiFi()
-    iface = wifi.interfaces()[0]
-    iface.scan()
-    time.sleep(0.5)
-    results = iface.scan_results()
+  wifi = pywifi.PyWiFi()
+  #iface = wifi.interfaces()[0]
+  d = Dialog(dialog="dialog")
+  d.set_background_title("Wifi Jammer")
+
+  num_ifaces = len(wifi.interfaces())
+
+  interface_choices = []
+  for i in range(num_ifaces):
+    num = "(" + str(i) + ")"
+    name = wifi.interfaces()[i].name()
+    interface_choices.append(
+      (num, name)
+    )
+  
+  code, tag = d.menu("Interface auswählen:",
+  choices = interface_choices)
+
+  sel_interface_num = 0
+  if code == d.OK:
+    for i in range(num_ifaces):
+      num = "(" + str(i) + ")"
+      if tag == num:
+        sel_interface_num = i
+  else:
+    quit()
+  
+  iface = wifi.interfaces()[sel_interface_num]
+
+  iface.scan()
+  time.sleep(0.5)
+  results = iface.scan_results()
+else:
+  print("You must run this tool as root user")
+  quit()
 
 class JAMMER:
 
@@ -366,7 +398,7 @@ class MainWindow(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        self.setGeometry(300,100,800,600)
+        self.setGeometry(1,1,800,600)
         self.setWindowTitle('jamming system')
         self.setStyleSheet(' background-color: #06294B')
 
@@ -457,7 +489,7 @@ class WindowTwo(QtWidgets.QWidget):
         self.output = None
         self.error = None
      
-        self.setGeometry(300, 100, 800, 600)
+        self.setGeometry(1, 1, 800, 600)
         self.setWindowTitle('jamming system')
         self.setStyleSheet(' background-color: #06294B')
         
@@ -677,7 +709,7 @@ class Login(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('wifi jamming tool')
-        self.setGeometry(500,100,400,600)
+        self.setGeometry(1,1,400,600)
         self.setStyleSheet(' background-color: #06294B; color:#fff; font-size:15px')
 
         flag = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
