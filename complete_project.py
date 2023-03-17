@@ -518,7 +518,7 @@ class WindowTwo(QtWidgets.QWidget):
         self.tableWidget.setRowCount(7)
 
         self.tableWidget.setStyleSheet(' background-color: #06294B;color:#fff;font-weight:family; font-size: 20px; ')
-        self.tableWidget.setItem.setStyleSheet('font-size: 20px; ')
+        #self.tableWidget.setItem.setStyleSheet('font-size: 20px; ')
         self.tableWidget.verticalHeader().setVisible(False)
         self.tableWidget.horizontalHeader().setVisible(False)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
