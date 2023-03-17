@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import getpass
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import *
@@ -49,6 +50,7 @@ if os.geteuid()==0:
   
   iface = wifi.interfaces()[sel_interface_num]
   airmon_interface = iface.name()
+  '''
   airmon_moninterface = airmon_interface
   if airmon_interface == 'wlan0':
     airmon_moninterface = 'wlan0mon'
@@ -58,6 +60,7 @@ if os.geteuid()==0:
     airmon_moninterface = 'wlan2mon'
   if airmon_interface == 'wlan3':
     airmon_moninterface = 'wlan3mon'
+  '''
 
   iface.scan()
   time.sleep(0.5)
