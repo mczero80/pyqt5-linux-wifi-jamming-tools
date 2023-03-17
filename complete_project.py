@@ -18,9 +18,10 @@ import pywifi
 from scapy.all import *
 from scapy.layers.dot11 import Dot11Elt, Dot11, Dot11Beacon
 
+airmon_interface = 'wlan0'
 if os.geteuid()==0:
   wifi = pywifi.PyWiFi()
-  #iface = wifi.interfaces()[0]
+  #sudo airmon-ng check kill ?
   d = Dialog(dialog="dialog")
   d.set_background_title("Wifi Jammer")
 
@@ -47,6 +48,16 @@ if os.geteuid()==0:
     quit()
   
   iface = wifi.interfaces()[sel_interface_num]
+  airmon_interface = iface.name()
+  airmon_moninterface = airmon_interface
+  if airmon_interface == 'wlan0':
+    airmon_moninterface = 'wlan0mon'
+  if airmon_interface == 'wlan1':
+    airmon_moninterface = 'wlan1mon'
+  if airmon_interface == 'wlan2':
+    airmon_moninterface = 'wlan2mon'
+  if airmon_interface == 'wlan3':
+    airmon_moninterface = 'wlan3mon'
 
   iface.scan()
   time.sleep(0.5)
@@ -68,7 +79,7 @@ class JAMMER:
         self.verbose    = True
         self.exceptions = ['00:00:00:00:00:00', '33:33:00:', '33:33:ff:', '01:80:c2:00:00:00', '01:00:5e:']
 
-        self.interface  = 'wlan0mon'
+        self.interface  = airmon_moninterface
 
         self.channel    = 0
         self.essids     = x[0]
@@ -564,6 +575,11 @@ class WindowTwo(QtWidgets.QWidget):
         self.mbutton.clicked.connect(self.management_mode)
         self.mbutton.setStyleSheet('color:#fff; padding-top:10px; padding-bottom:10px; padding-left:30px; padding-right:30px; font-size:15px ')
 
+        self.ckbutton = QtWidgets.QPushButton('airmon-ng check kill')
+        self.ckbutton.clicked.connect(self.checkkill)
+        self.ckbutton.setStyleSheet('color:#fff; padding-top:10px; padding-bottom:10px; padding-left:30px; padding-right:30px; font-size:15px ')
+
+
         self.back = QtWidgets.QPushButton('back')
         self.back.clicked.connect(self.switch)
         self.back.setStyleSheet('color:#fff; padding-top:10px; padding-bottom:10px; padding-left:30px; padding-right:30px; font-size:15px')
@@ -591,6 +607,8 @@ class WindowTwo(QtWidgets.QWidget):
         hbox.addWidget(self.button)
         hbox.addStretch()
         hbox.addWidget(self.mbutton)        
+        hbox.addStretch()
+        hbox.addWidget(self.ckbutton)        
         hbox.addStretch()
         
                         
@@ -656,7 +674,7 @@ class WindowTwo(QtWidgets.QWidget):
         
         self.errorSignal.connect(lambda error: print(error))
         self.outputSignal.connect(lambda output: print(output))
-        self.run("airmon-ng start wlan0")
+        self.run("airmon-ng start " +airmon_interface)
         self.host=socket.gethostname()  
         self.take=getpass.getuser()  
         self.cwd = os.getcwd()         
@@ -668,7 +686,18 @@ class WindowTwo(QtWidgets.QWidget):
         self.errorSignal.connect(lambda error: print(error))
         self.outputSignal.connect(lambda output: print(output))
         
-        self.run("airmon-ng stop wlan0mon")
+        self.run("airmon-ng stop " +airmon_moninterface)
+        self.host=socket.gethostname()  
+        self.take=getpass.getuser()  
+        self.cwd = os.getcwd()         
+        self.message("You run as "+self.take+"\nHostname "+self.host+"\nCurrent Working Directory "+self.cwd)
+
+    def checkkill(self):
+        self.p = QProcess()
+        self.errorSignal.connect(lambda error: print(error))
+        self.outputSignal.connect(lambda output: print(output))
+        
+        self.run("airmon-ng check kill")
         self.host=socket.gethostname()  
         self.take=getpass.getuser()  
         self.cwd = os.getcwd()         
