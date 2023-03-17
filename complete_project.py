@@ -398,7 +398,7 @@ class MainWindow(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        self.setGeometry(1,1,800,600)
+        self.setGeometry(1,8,800,600)
         self.setWindowTitle('jamming system')
         self.setStyleSheet(' background-color: #06294B')
 
@@ -489,7 +489,7 @@ class WindowTwo(QtWidgets.QWidget):
         self.output = None
         self.error = None
      
-        self.setGeometry(1, 1, 800, 600)
+        self.setGeometry(1, 8, 800, 600)
         self.setWindowTitle('jamming system')
         self.setStyleSheet(' background-color: #06294B')
         
@@ -709,7 +709,7 @@ class Login(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('wifi jamming tool')
-        self.setGeometry(1,1,400,600)
+        self.setGeometry(1,8,400,600)
         self.setStyleSheet(' background-color: #06294B; color:#fff; font-size:15px')
 
         flag = QtCore.Qt.WindowFlags(QtCore.Qt.FramelessWindowHint)
