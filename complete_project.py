@@ -61,6 +61,7 @@ if os.geteuid()==0:
   if airmon_interface == 'wlan3':
     airmon_moninterface = 'wlan3mon'
   '''
+  airmon_moninterface = airmon_interface
 
   iface.scan()
   time.sleep(0.5)
