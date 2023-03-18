@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Wifi Jammer
+Comment=Wifi Jammer
+Exec=/usr/bin/gksu /home/user/pyqt5-linux-wifi-jamming-tools/complete_project.py
+Icon=network-assistant
+NoDisplay=False
+Categories=System;
+Type=Application
+GenericName=Wifi Jammer
+Terminal=True
